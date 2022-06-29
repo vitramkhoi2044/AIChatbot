@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Chatbot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body onload="page_load();">
+    <div class="card">
+        <div class="card-header bg-dark text-light text-center">
+            <h1>AI Chatbot</h1>
+        </div>
+        <div class="card-body">
+            <h5 class="text-dark text-center">Messages</h5>
+            <div id="chatbox">
+                <p class="botText"><span>Hi! I'm Chatbot.</span></p>
+            </div>
+            <div id="userInput">
+                <input id="textInput" type="text" name="msg" placeholder="Message">
+                <input id="buttonInput" value="Send" class="btn btn-primary" type="submit" onclick="getBotResponse()">
+            </div>
+            <!-- Axios JavaScript -->
+            <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+            <!-- My Javascript -->
+            <script src="../static/index.js"></script>
+
+            <script>
+                var input = document.getElementById("textInput");
+                input.addEventListener("keypress", function (event) {
+                  if (event.key == "Enter") {
+                    event.preventDefault();
+                    document.getElementById("buttonInput").click();
+                  }
+                });
+              </script>
+        </div>
+    </div>
+</body>
+
+</html>
