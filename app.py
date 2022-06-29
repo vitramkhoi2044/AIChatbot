@@ -27,9 +27,9 @@ data = []
 messages = []
 statusChat = [{"status": "bot"}]
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+# @app.route("/")
+# def home():
+#     return render_template("index.html")
 
 @app.route("/get")
 def get_bot_response():
@@ -55,19 +55,21 @@ def set_status_chat():
 def get_status_chat():
     return jsonify(statusChat)
 
-@app.route("/setmanagerresponse")
+@app.route("/getmanagerresponse")
 def get_manager_response():
     managerText = request.args.get('msg')
+    botText = english_bot.get_response(managerText)
     json_string = {"manager": str(managerText)}
     messages.append(json.loads(json.dumps(json_string)))
-    return jsonify(messages)
+    return str(messages)
 
-@app.route("/setuserresponse")
+@app.route("/getuserresponse")
 def get_user_response():
     userText = request.args.get('msg')
+    botText = english_bot.get_response(userText)
     json_string = {"user": str(userText)}
     messages.append(json.loads(json.dumps(json_string)))
-    return jsonify(messages)
+    return str(messages)
 
 @app.route("/getmessages")
 def get_messages():

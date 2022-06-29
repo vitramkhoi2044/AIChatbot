@@ -17,7 +17,7 @@ function getBotResponse() {
             });
         }
         else if (statusChat == 'manager') {
-            axios.get("http://127.0.0.1:5000" + "/setuserresponse?msg=" + rawText).then((response) => { });
+            axios.get("http://127.0.0.1:5000" + "/getuserresponse?msg=" + rawText).then((response) => { });
         }
     });
 }

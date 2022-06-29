@@ -5,7 +5,7 @@ function getManagerResponse() {
     let botHtml = '<p class="botText"><span>' + rawText + '</span></p>';
     document.getElementById("chatbox").innerHTML += botHtml;
     document.getElementById('userInput').scrollIntoView({ block: 'start', behavior: 'smooth' });
-    axios.get("http://127.0.0.1:5000" + "/setmanagerresponse?msg=" + rawText).then((response) => { });
+    axios.get("http://127.0.0.1:5000" + "/getmanagerresponse?msg=" + rawText).then((response) => { });
 }
 
 function getUserEmotion() {
