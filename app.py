@@ -1,4 +1,3 @@
-import re
 from flask import Flask, render_template, request,jsonify
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
@@ -11,7 +10,16 @@ emotion = pipeline('sentiment-analysis', model='arpanghoshal/EmoRoBERTa')
 app = Flask(__name__)
 CORS(app)
 
-english_bot = ChatBot("Chatterbot", storage_adapter="chatterbot.storage.SQLStorageAdapter")
+english_bot = ChatBot("Chatbot", 
+    storage_adapter="chatterbot.storage.SQLStorageAdapter",
+    logic_adapters=[
+        {
+            'import_path': 'chatterbot.logic.BestMatch',
+            'default_response': 'I am sorry, but I do not understand.',
+            'maximum_similarity_threshold': 0.90
+        }
+    ]
+    )
 trainer = ChatterBotCorpusTrainer(english_bot)
 trainer.train("chatterbot.corpus.english")
 

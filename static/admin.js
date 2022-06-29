@@ -1,28 +1,14 @@
-//chatbot page function
-function getBotResponse() {
+//Manager Page Funtion
+function getManagerResponse() {
     let rawText = String(document.getElementById("textInput").value);
-    var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
     document.getElementById("textInput").value = "";
-    document.getElementById("chatbox").innerHTML += userHtml;
+    let botHtml = '<p class="botText"><span>' + rawText + '</span></p>';
+    document.getElementById("chatbox").innerHTML += botHtml;
     document.getElementById('userInput').scrollIntoView({ block: 'start', behavior: 'smooth' });
-    axios.get("http://127.0.0.1:5000/getstatuschat").then((response) => {
-        let data = response.data;
-        let statusChat = data[data.length - 1].status;
-        if (statusChat == 'bot') {
-            //fetch API by Axios
-            axios.get("http://127.0.0.1:5000" + "/get?msg=" + rawText).then((response) => {
-                let botHtml = '<p class="botText"><span>' + response.data + '</span></p>';
-                document.getElementById("chatbox").innerHTML += botHtml;
-                document.getElementById('userInput').scrollIntoView({ block: 'start', behavior: 'smooth' });
-            });
-        }
-        else if (statusChat == 'manager') {
-            axios.get("http://127.0.0.1:5000" + "/setuserresponse?msg=" + rawText).then((response) => { });
-        }
-    });
+    axios.get("http://127.0.0.1:5000" + "/setmanagerresponse?msg=" + rawText).then((response) => { });
 }
 
-function page_load() {
+function getUserEmotion() {
     axios.get("http://127.0.0.1:5000/getstatuschat").then((response) => {
         let data = response.data;
         let statusChat = data[data.length - 1].status;
@@ -31,10 +17,14 @@ function page_load() {
             axios.get("http://127.0.0.1:5000/getemotion").then((response) => {
                 let data = response.data;
                 renderMessage(data);
+                emotionStatus(data);
             });
         }
         else if (statusChat == 'manager') {
             axios.get("http://127.0.0.1:5000/getemotion").then((response) => {
+                document.getElementById("emotion-status").style.visibility = "hidden";
+                document.getElementById("textInput").style.visibility = "visible";
+                document.getElementById("buttonInput").style.visibility = "visible";
                 let data = response.data;
                 renderMessage(data);
                 axios.get("http://127.0.0.1:5000/getmessages").then((response) => {
@@ -45,6 +35,32 @@ function page_load() {
         }
     });
 }
+
+function emotionStatus(data) {
+    emotion = String(data[data.length - 1].emotion);
+    let content = `
+    <h3 class="mt-3">User Emotion: <br/> </h3>
+    <h3><b class="text-danger p-2">`+ emotion.toUpperCase() + `</b></h3>
+    `
+    if (emotion == 'anger' || emotion == "annoyance" || emotion == "disappointment" || emotion == "disapproval" || emotion == "disgust" || emotion == "grief" || emotion == "sadness") {
+        content += `
+        <img width="110px" height="110px" src="https://findicons.com/files/icons/1786/oxygen_refit/128/face_angry.png"/> <br/>
+        <input type="button" value="Chat with user" class="btn btn-primary mt-2" onClick="chatWithUser()">
+        `
+        alert("The user emotion not good!!!");
+    }
+    else
+        content += `<img width="110px" height="110px" src="https://findicons.com/files/icons/360/emoticons/128/satisfied.png"/>`
+    document.getElementById("emotion-status").innerHTML = content;
+}
+
+function chatWithUser() {
+    axios.get("http://127.0.0.1:5000/setstatuschat?msg=manager").then((response) => {
+        location.reload();
+    });
+}
+
+//I don't want to hear any ads from you
 
 //helper function
 function renderMessage(data) {
